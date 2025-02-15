@@ -9,7 +9,11 @@ import { wagmiAbi } from '../abi'
 
 function LiveBet() {
   const navigate = useNavigate()
-  const [questions, setQuestions] = useState([])
+  const [questions, setQuestions] = useState([
+    "Will PEPE flip DOGE in market cap by end of 2024?",
+    "Will Mantle (MNT) break $2 by July 2024?",
+    "Will Bitcoin reach $150k before September 2024?"
+  ])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [showChat, setShowChat] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -30,29 +34,6 @@ function LiveBet() {
   // Initialize Gemini API
   const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY)
   const model = genAI.getGenerativeModel({ model: "gemini-pro" })
-
-  // Fetch questions from contract
-  useEffect(() => {
-    const fetchQuestions = async () => {
-      try {
-        const contractQuestions = await publicClient.readContract({
-          address: "0x40bde52e6B80Ae11F34C58c14E1E7fE1f9c834C4",
-          abi: wagmiAbi,
-          functionName: "getAllQuestions",
-          args: []
-        });
-        console.log('Fetched questions:', contractQuestions)
-        setQuestions(contractQuestions)
-      } catch (err) {
-        console.error('Error fetching questions:', err)
-        setError('Failed to load predictions')
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchQuestions()
-  }, [])
 
   const handleDragEnd = async (_, info) => {
     const swipeThreshold = 100
@@ -156,72 +137,64 @@ function LiveBet() {
 
       {/* Swipeable Card */}
       <div className="w-full max-w-xl mb-8 relative z-20">
-        {loading ? (
-          <div className="text-center text-xl font-bold text-pink-600">Loading predictions...</div>
-        ) : error ? (
-          <div className="text-center text-red-500">{error}</div>
-        ) : questions.length === 0 ? (
-          <div className="text-center text-xl font-bold text-pink-600">No predictions available</div>
-        ) : (
-          <motion.div
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            style={{ x, y, rotate }}
-            animate={controls}
-            onDragEnd={handleDragEnd}
-            className="w-full cursor-grab active:cursor-grabbing"
-          >
-            <div className="bg-gradient-to-br from-pink-400 to-purple-500 rounded-2xl overflow-hidden shadow-xl">
-              {/* Background Pattern */}
-              <div className="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSIjZmZmIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjIiLz48L2c+PC9zdmc+')]"></div>
+        <motion.div
+          drag="x"
+          dragConstraints={{ left: 0, right: 0 }}
+          style={{ x, y, rotate }}
+          animate={controls}
+          onDragEnd={handleDragEnd}
+          className="w-full cursor-grab active:cursor-grabbing"
+        >
+          <div className="bg-gradient-to-br from-pink-400 to-purple-500 rounded-2xl overflow-hidden shadow-xl">
+            {/* Background Pattern */}
+            <div className="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSIjZmZmIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjIiLz48L2c+PC9zdmc+')]"></div>
 
-              {/* Card Content */}
-              <div className="p-6">
-                {/* Question Number */}
-                <div className="text-white/80 text-sm mb-4">
-                  Question {currentIndex + 1} of {questions.length}
-                </div>
-
-                {/* Question */}
-                <div className="min-h-[100px] flex items-center mb-6">
-                  <h3 className="text-xl font-bold text-white text-center w-full">
-                    {questions[currentIndex]}
-                  </h3>
-                </div>
-
-                {/* Bottom Buttons */}
-                <div className="flex justify-between items-center mt-8">
-                  <button 
-                    onClick={() => handleDragEnd(null, { offset: { x: -150 } })}
-                    className="bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-all transform hover:scale-105 active:scale-95"
-                  >
-                    <span className="text-4xl">❌</span>
-                  </button>
-                  <button 
-                    onClick={handleTickClick}
-                    className="bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-all transform hover:scale-105 active:scale-95"
-                  >
-                    <span className="text-4xl">✅</span>
-                  </button>
-                </div>
-
-                {/* Swipe Indicators */}
-                <motion.div 
-                  className="absolute top-1/2 left-4 transform -translate-y-1/2 pointer-events-none"
-                  style={{ opacity: noOpacity }}
-                >
-                  <span className="text-6xl">❌</span>
-                </motion.div>
-                <motion.div 
-                  className="absolute top-1/2 right-4 transform -translate-y-1/2 pointer-events-none"
-                  style={{ opacity: yesOpacity }}
-                >
-                  <span className="text-6xl">✅</span>
-                </motion.div>
+            {/* Card Content */}
+            <div className="p-6">
+              {/* Question Number */}
+              <div className="text-white/80 text-sm mb-4">
+                Prediction {currentIndex + 1} of {questions.length}
               </div>
+
+              {/* Question */}
+              <div className="min-h-[100px] flex items-center mb-6">
+                <h3 className="text-xl font-bold text-white text-center w-full">
+                  {questions[currentIndex]}
+                </h3>
+              </div>
+
+              {/* Bottom Buttons */}
+              <div className="flex justify-between items-center mt-8">
+                <button 
+                  onClick={() => handleDragEnd(null, { offset: { x: -150 } })}
+                  className="bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-all transform hover:scale-105 active:scale-95"
+                >
+                  <span className="text-4xl">❌</span>
+                </button>
+                <button 
+                  onClick={handleTickClick}
+                  className="bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-all transform hover:scale-105 active:scale-95"
+                >
+                  <span className="text-4xl">✅</span>
+                </button>
+              </div>
+
+              {/* Swipe Indicators */}
+              <motion.div 
+                className="absolute top-1/2 left-4 transform -translate-y-1/2 pointer-events-none"
+                style={{ opacity: noOpacity }}
+              >
+                <span className="text-6xl">❌</span>
+              </motion.div>
+              <motion.div 
+                className="absolute top-1/2 right-4 transform -translate-y-1/2 pointer-events-none"
+                style={{ opacity: yesOpacity }}
+              >
+                <span className="text-6xl">✅</span>
+              </motion.div>
             </div>
-          </motion.div>
-        )}
+          </div>
+        </motion.div>
       </div>
 
       {/* Eliza AI Button */}
