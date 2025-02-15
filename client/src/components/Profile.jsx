@@ -15,7 +15,7 @@ function Profile() {
             onClick={() => navigate('/')}
             className="text-3xl font-bold text-pink-600 cursor-pointer hover:text-pink-500 transition-colors mb-4"
           >
-            PrediFlow
+            PrediMantle
           </h1>
           <div className="bg-blue-500 rounded-2xl p-2">
             <ConnectButton />
@@ -52,8 +52,8 @@ function Profile() {
             <div className="border-b border-pink-800/60 py-3">
               <div className="flex justify-between items-center">
                 <div>
-                  <p className="font-medium">Placed 0.5 FLOW</p>
-                  <p className="text-sm text-gray-700">"Will I win flow track"</p>
+                  <p className="font-medium">Placed 0.5 MNT</p>
+                  <p className="text-sm text-gray-700">"Will I win sozu hack"</p>
                 </div>
                 <div className="text-right">
                   <p className="text-sm text-gray-700">2 hours ago</p>
@@ -65,8 +65,8 @@ function Profile() {
             <div className="border-b border-pink-800/60 py-3">
               <div className="flex justify-between items-center">
                 <div>
-                  <p className="font-medium">Placed 1.2 FLOW</p>
-                  <p className="text-sm text-gray-700">"Will FLOW become leading green chain"</p>
+                  <p className="font-medium">Placed 1.2 MNT</p>
+                  <p className="text-sm text-gray-700">"Will Mantle become leading  chain"</p>
                 </div>
                 <div className="text-right">
                   <p className="text-sm text-gray-700">5 hours ago</p>

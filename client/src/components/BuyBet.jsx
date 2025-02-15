@@ -8,21 +8,21 @@ import { usePrivy } from '@privy-io/react-auth'
 import { createPublicClient , http } from 'viem'
 import { createWalletClient ,custom } from 'viem'
 
-const flowTestnet = {
-  id: 545,
-  name: 'Flow Testnet',
-  network: 'flow-testnet',
+const mantleSepoliaTestnet = {
+  id: 5003,
+  name: 'Mantle Sepolia',
+  network: 'mantle-sepolia',
   nativeCurrency: {
     decimals: 18,
-    name: 'FLOW',
-    symbol: 'FLOW',
+    name: 'MNT',
+    symbol: 'MNT',
   },
   rpcUrls: {
     default: {
-      http: ['https://testnet.evm.nodes.onflow.org']
+      http: ['https://rpc.sepolia.mantle.xyz']
     },
     public: {
-      http: ['https://testnet.evm.nodes.onflow.org']
+      http: ['https://rpc.sepolia.mantle.xyz']
     }
   }
 }
@@ -59,13 +59,13 @@ function BuyBet() {
 
       // Create public client
       const publicClient = createPublicClient({
-        chain: flowTestnet,
+        chain: mantleSepoliaTestnet,
         transport: http()
       })
 
       // Create wallet client
       const walletClient = createWalletClient({
-        chain: flowTestnet,
+        chain: mantleSepoliaTestnet,
         transport: custom(window.ethereum)
       })
 
@@ -73,22 +73,22 @@ function BuyBet() {
       try {
         await window.ethereum.request({
           method: 'wallet_switchEthereumChain',
-          params: [{ chainId: '0x221' }]
+          params: [{ chainId: '0x138b' }]
         })
       } catch (switchError) {
         if (switchError.code === 4902) {
           await window.ethereum.request({
             method: 'wallet_addEthereumChain',
             params: [{
-              chainId: '0x221',
-              chainName: 'Flow Testnet',
+              chainId: '0x138b',
+              chainName: 'Mantle Sepolia',
               nativeCurrency: {
-                name: 'FLOW',
-                symbol: 'FLOW',
+                name: 'MNT',
+                symbol: 'MNT',
                 decimals: 18
               },
-              rpcUrls: ['https://testnet.evm.onflow.org'],
-              blockExplorerUrls: ['https://testnet.flowscan.org']
+              rpcUrls: ['https://rpc.sepolia.mantle.xyz'],
+              blockExplorerUrls: ['https://testnet.mantle.xyz']
             }]
           })
         }
@@ -96,8 +96,8 @@ function BuyBet() {
 
       // Get current chain ID to verify
       const chainId = await walletClient.getChainId()
-      if (chainId !== 545) {
-        throw new Error('Please switch to Flow Testnet')
+      if (chainId !== 5003) {
+        throw new Error('Please switch to Mantle Sepolia')
       }
 
       // Prepare the contract write
@@ -141,7 +141,7 @@ function BuyBet() {
             onClick={() => navigate('/')}
             className="text-3xl font-bold text-pink-600 cursor-pointer hover:text-pink-500 transition-colors mb-4"
           >
-            PrediFlow
+            PrediMantle
           </h1>
           <div className="bg-blue-500 rounded-2xl p-2">
             <ConnectButton />
@@ -165,7 +165,7 @@ function BuyBet() {
             {/* Amount Input */}
             <div className="bg-pink-200 p-5 rounded-xl border border-pink-400">
               <label className="block text-black text-sm font-semibold mb-2">
-                Amount (FLOW)
+                Amount (MNT)
               </label>
               <input
                 type="number"

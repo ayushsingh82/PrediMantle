@@ -1,41 +1,54 @@
 import { createPublicClient, createWalletClient , http, custom } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
-import { flowTestnet } from 'viem/chains'
+import {   mantaSepoliaTestnet } from 'viem/chains'
 
 // Custom Flow Testnet configuration
-export const flowTestnetTry = {
-  id: 545,
-  name: 'Flow Testnet',
-  network: 'flow-testnet',
+export const mantleSepoliaTestnetTry = {
+  id: 5003,
+  name: 'Mantle Sepolia',
+  network: 'mantle-sepolia',
   nativeCurrency: {
     decimals: 18,
-    name: 'Flow',
-    symbol: 'FLOW',
+    name: 'Mantle',
+    symbol: 'MNT',
   },
   rpcUrls: {
     default: {
-      http: ['https://testnet.evm.nodes.onflow.org'],
+      http: ['https://rpc.sepolia.mantle.xyz'],
       
     },
     public: {
-      http: ['https://testnet.evm.nodes.onflow.org'],
+      http: ['https://rpc.sepolia.mantle.xyz'],
     },
   },
   blockExplorers: {
-    default: { name: 'FlowScan', url: 'https://testnet.flowscan.org' },
+    default: { name: 'MantleScan', url: 'https://testnet.mantle.xyz' },
   },
   testnet: true,
 }
 
 // Public client
 export const publicClient = createPublicClient({
-  chain: flowTestnet,
+  chain: {
+    id: 5003,
+    name: 'Mantle Sepolia',
+    network: 'mantle-sepolia',
+    nativeCurrency: {
+      decimals: 18,
+      name: 'MNT',
+      symbol: 'MNT',
+    },
+    rpcUrls: {
+      default: { http: ['https://rpc.sepolia.mantle.xyz'] },
+      public: { http: ['https://rpc.sepolia.mantle.xyz'] },
+    },
+  },
   transport: http()
 })
 
 // Wallet client
 export const walletClient = createWalletClient({
-  chain: flowTestnet,
+  chain: mantaSepoliaTestnet,
   transport: custom(window.ethereum)
 })
 
@@ -43,7 +56,7 @@ export const walletClient = createWalletClient({
 export const getWalletClient = () => {
   if (typeof window !== 'undefined' && window.ethereum) {
     return createWalletClient({
-      chain: flowTestnet,
+      chain: mantaSepoliaTestnet,
       transport: custom(window.ethereum),
       account: window.ethereum.selectedAddress
     })
@@ -53,15 +66,15 @@ export const getWalletClient = () => {
 
 // Chain configuration for wallet connection
 export const chainConfig = {
-  chainId: '0x221', // 545 in hex
-  chainName: 'Flow Testnet',
+  chainId: '0x138b', // 545 in hex
+  chainName: 'Mantle Sepolia',
   nativeCurrency: {
-    name: 'Flow',
-    symbol: 'FLOW',
+    name: 'MNT',
+    symbol: 'MNT',
     decimals: 18
   },
-  rpcUrls: ['https://testnet.evm.nodes.onflow.org'],
-  blockExplorerUrls: ['https://testnet.flowscan.org']
+  rpcUrls: ['https://rpc.sepolia.mantle.xyz'],
+  blockExplorerUrls: ['https://testnet.mantle.xyz']
 }
 
 // JSON-RPC Account

@@ -144,7 +144,7 @@ function LiveBet() {
             onClick={() => navigate('/')}
             className="text-3xl font-bold text-pink-600 cursor-pointer hover:text-pink-500 transition-colors mb-4"
           >
-            PrediFlow
+            PrediMantle
           </h1>
           <div className="bg-blue-500 rounded-2xl p-2">
             <ConnectButton />
